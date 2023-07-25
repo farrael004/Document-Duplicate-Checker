@@ -28,4 +28,4 @@ import re
 import ktrain
 from requests_ntlm import HttpNtlmAuth
 
-cli.main_run_clExplicit('deduplication/app.py', 'streamlit run')
+import launch

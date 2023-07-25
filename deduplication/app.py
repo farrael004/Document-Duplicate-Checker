@@ -9,7 +9,7 @@ st.set_page_config(
     page_title="Duplicate Document Checker", page_icon="📘"
 )
 
-#login()
+login()
 
 st.title("📘Duplicate Document Checker")
 

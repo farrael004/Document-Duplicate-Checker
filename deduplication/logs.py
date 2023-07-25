@@ -6,6 +6,7 @@ from time import perf_counter
 from datetime import datetime
 from requests_ntlm import HttpNtlmAuth
 import secret
+import os
 
 def get_digest_token():
     """
@@ -25,7 +26,7 @@ def get_digest_token():
         If the POST request fails or returns a non-200 status code, an \
         exception is raised and an error message is displayed.
     """
-    url = f"https://{secret.site}/co/{secret.project}/_api/contextinfo"
+    url = f"https://{secret.site}{secret.project}/_api/contextinfo"
     USERNAME = f"{secret.username_prefix}{st.session_state['username']}"
     PASSWORD = st.session_state['password']
     headers = {
@@ -69,6 +70,9 @@ def add_log(form_args: dict, algo_option: str, start_time: float, documents: pd.
     - documents: pd.DataFrame
         A dataframe of documents that were clustered.
     """
+    if not st.session_state['log_metrics']:
+        return
+    
     st.session_state['log_data']['clustering_type'] = algo_option
 
     if algo_option == 'Similarity clustering':
@@ -117,7 +121,7 @@ def add_log(form_args: dict, algo_option: str, start_time: float, documents: pd.
             continue
         body[field] = st.session_state['log_data'][field]
 
-    url = f"https://{secret.site}/co/{secret.project}/_api/lists(guid'{secret.guid}')/items"
+    url = f"https://{secret.site}{secret.project}/_api/lists(guid'{secret.guid}')/items"
 
     headers = {
         "Accept": "application/json; odata=verbose",
@@ -143,6 +147,40 @@ def login():
     """
     This function handles the login process for the user.
     """
+    if 'log_metrics' not in st.session_state:
+        st.session_state['log_metrics'] = None
+
+    if st.session_state['log_metrics'] is None:
+        if os.path.exists('log_metrics.txt'):
+            with open('log_metrics.txt', 'r') as f:
+                st.session_state['log_metrics'] = True if f.read() == "True" else False
+        else:
+            st.write("Log usage telemetry?")
+            col1, col2, col3 = st.columns((1,1,6))
+            button_yes = col1.button("Yes", use_container_width=True)
+            button_no = col2.button('No', use_container_width=True)
+            remember_checkbox = st.checkbox("Remember selection", help="If marked, this dialog option will not appear again. The choice you make now will be remembered next time you open this application.")
+            
+            if button_yes:
+                st.session_state['log_metrics'] = True
+                if remember_checkbox:
+                    with open('log_metrics.txt', 'w') as f:
+                        f.write("True")
+            if button_no:
+                st.session_state['log_metrics'] = False
+                if remember_checkbox:
+                    with open('log_metrics.txt', 'w') as f:
+                        f.write("False")
+
+            
+
+            if button_yes or button_no:
+                st.experimental_rerun()
+            st.stop()
+    
+    if not st.session_state['log_metrics']:
+        return
+
     if 'password_works' not in st.session_state:
         st.session_state['password_works'] = False
         st.session_state['username'] = '' 
@@ -155,8 +193,8 @@ def login():
             try:
                 get_digest_token()
                 st.session_state['password_works'] = True
-            except:
-                pass
+            except Exception as e:
+                st.error("Something went wrong when trying to login")
         if st.session_state['password_works']:
             st.experimental_rerun()
             
