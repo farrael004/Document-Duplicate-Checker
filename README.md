@@ -51,12 +51,6 @@ If you want to develop the tool, you can, after activating the virtual environme
 
 ![guid](media/GUID.png)
 
-
-
-## Type of data used
-
-Up to Protected B.
-
 ## Code flow diagram
 
 ![diagram](media/out.png)
@@ -82,15 +76,3 @@ Then, you can select an appropriate similarity sensitivity to find documents tha
 <img src="media/similarity.png" alt="drawing" width="500"/>
 
 Try to start with lower sensitivities first, and then increase gradually to see how this parameter affects the clustering.
-
-## Business owner
-
-This tool was created for helping ATIP agents. In the future, it could be used more broadly.
-
-## Acknowledgements
-
-So far, Rafael Moraes and Hardik Munjal have contributed to this project.
-
-## Sources
-
-[Packaging Streamlit apps into executables](https://001gc.sharepoint.com/sites/72164/SitePages/Packaging-Streamlit-apps-into-executables.aspx)
