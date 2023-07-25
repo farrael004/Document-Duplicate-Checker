@@ -47,10 +47,6 @@ def main_run_clExplicit(file, command_line, args=[], flag_options=[]):
 
 If you want to develop the tool, you can, after activating the virtual environment, you can run the command `streamlit run deduplication/app.py` and the tool will run without needing to build the executable.
 
-### Setting up the logger
-
-![guid](media/GUID.png)
-
 ## Code flow diagram
 
 ![diagram](media/out.png)
