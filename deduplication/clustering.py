@@ -275,7 +275,7 @@ def cluster(directory:str,
     if submit_button:
         documents = cluster_documents(normalized_vectors, form_args, text_data, directory, algo_option)
         st.session_state['documents'] = documents
-        add_log(form_args, algo_option, start_time, documents)
+        #add_log(form_args, algo_option, start_time, documents)
 
     if 'documents' not in st.session_state:
         tab2.info('Choose appropriate settings on the sidebar and press "Submit".')

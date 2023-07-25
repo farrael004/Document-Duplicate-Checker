@@ -25,8 +25,8 @@ def get_digest_token():
         If the POST request fails or returns a non-200 status code, an \
         exception is raised and an error message is displayed.
     """
-    url = f"https://collab.agr.gc.ca/co/{secret.project}/_api/contextinfo"
-    USERNAME = f"AAFC-AAC\\{st.session_state['username']}"
+    url = f"https://{secret.site}/co/{secret.project}/_api/contextinfo"
+    USERNAME = f"{secret.username_prefix}{st.session_state['username']}"
     PASSWORD = st.session_state['password']
     headers = {
         "Accept": "application/json; odata=verbose",
@@ -117,7 +117,7 @@ def add_log(form_args: dict, algo_option: str, start_time: float, documents: pd.
             continue
         body[field] = st.session_state['log_data'][field]
 
-    url = f"https://collab.agr.gc.ca/co/{secret.project}/_api/lists(guid'{secret.guid}')/items"
+    url = f"https://{secret.site}/co/{secret.project}/_api/lists(guid'{secret.guid}')/items"
 
     headers = {
         "Accept": "application/json; odata=verbose",
@@ -125,7 +125,7 @@ def add_log(form_args: dict, algo_option: str, start_time: float, documents: pd.
         "X-RequestDigest": get_digest_token()
     }
 
-    USERNAME = f"AAFC-AAC\\{st.session_state['username']}"
+    USERNAME = f"{secret.username_prefix}{st.session_state['username']}"
     PASSWORD = st.session_state['password']
 
     try:
